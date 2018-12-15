@@ -103,3 +103,38 @@ for reg in reg_params:
 # Look at best rmse per l2 param
 print("Best rmse as a function of l2:")
 print(pd.DataFrame(list(zip(reg_params, rmses_l2)), columns=["l2", "rmse"]))
+#
+#
+#
+#
+#
+# Import necessary modules
+from sklearn_pandas import DataFrameMapper
+from sklearn_pandas import CategoricalImputer
+
+# Check number of nulls in each feature column
+nulls_per_column = X.isnull().sum()
+print(nulls_per_column)
+
+# Create a boolean mask for categorical columns
+categorical_feature_mask = X.dtypes == object
+
+# Get list of categorical column names
+categorical_columns = X.columns[categorical_feature_mask].tolist()
+
+# Get list of non-categorical column names
+non_categorical_columns = X.columns[~categorical_feature_mask].tolist()
+
+# Apply numeric imputer
+numeric_imputation_mapper = DataFrameMapper(
+                                            [([numeric_feature],Imputer(strategy="median")) for numeric_feature in non_categorical_columns],
+                                            input_df=True,
+                                            df_out=True
+                                           )
+
+# Apply categorical imputer
+categorical_imputation_mapper = DataFrameMapper(
+                                                [(category_feature, CategoricalImputer()) for category_feature in categorical_columns],
+                                                input_df=True,
+                                                df_out=True
+                                               )
