@@ -138,3 +138,16 @@ categorical_imputation_mapper = DataFrameMapper(
                                                 input_df=True,
                                                 df_out=True
                                                )
+                                               
+                                               
+#
+#
+#
+# Import FeatureUnion
+from sklearn.pipeline import FeatureUnion
+
+# Combine the numeric and categorical transformations
+numeric_categorical_union = FeatureUnion([
+                                          ("num_mapper", numeric_imputation_mapper),
+                                          ("cat_mapper", categorical_imputation_mapper)
+                                         ])
